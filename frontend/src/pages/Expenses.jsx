@@ -6,7 +6,7 @@ export default function Expenses() {
     register,
     reset,
     handleSubmit,
-    formState: { errors,isSubmitting  },
+    formState: { errors,isSubmitting },
   } = useForm({
     resolver: zodResolver(expenseSchema),
     defaultValues: {

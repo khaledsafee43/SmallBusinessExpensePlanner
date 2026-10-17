@@ -5,6 +5,7 @@ import {
   WalletCardsIcon,
   WalletIcon,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -18,23 +19,40 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import HeroSection from "../components/hero";
 export default function Home() {
-  const monthlyData = [
-    { month: "Jan", income: 2000, expenses: 1100 },
-    { month: "Feb", income: 2600, expenses: 1500 },
-    { month: "Mar", income: 3300, expenses: 1900 },
-    { month: "Apr", income: 3200, expenses: 1750 },
-    { month: "May", income: 4500, expenses: 2600 },
-    { month: "Jun", income: 4550, expenses: 2600 },
-  ];
+  const [dashboard, setDashboard] = useState({
+    totalExpenses: 0,
+    categoryData: [],
+    monthlyData: [],
+  });
 
-  const categoryData = [
-    { name: "Rent", value: 32, amount: 752 },
-    { name: "Utilities", value: 18, amount: 423 },
-    { name: "Food", value: 15, amount: 352 },
-    { name: "Marketing", value: 12, amount: 282 },
-    { name: "Others", value: 23, amount: 541 },
-  ];
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/expenses/dashboard",
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch dashboard");
+        }
+
+        const data = await response.json();
+        setDashboard(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+  const { totalExpenses, categoryData, monthlyData } = dashboard;
 
   const categoryColors = [
     "#07845B",
@@ -46,6 +64,8 @@ export default function Home() {
 
   return (
     <main>
+      {/* Hero Section */}
+      <HeroSection />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-8">
         <div className="pb-3">
           <h1 className="text-emerald-950 font-bold text-4xl p-2 mb-2">
@@ -67,7 +87,13 @@ export default function Home() {
             </div>
             <div>
               <span>Total Income</span>
-              <h1>$5,000.00</h1>
+              <h1>
+                $
+                {totalExpenses.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </h1>
             </div>
           </div>
           <div className="bg-[#FFF5F5] flex items-center gap-2 shadow-md p-6 rounded-md">
@@ -76,7 +102,13 @@ export default function Home() {
             </div>
             <div>
               <span>Total Expenses</span>
-              <h1>$5,000.00</h1>
+              <h1>
+                $
+                {totalExpenses.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </h1>
             </div>
           </div>
           <div className="bg-[#EFF6FF] flex items-center gap-2 shadow-md p-6 rounded-md">
@@ -85,7 +117,13 @@ export default function Home() {
             </div>
             <div>
               <span>Remaining Balance</span>
-              <h1>$5,000.00</h1>
+              <h1>
+                $
+                {totalExpenses.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </h1>
             </div>
           </div>
           <div className="bg-[#FFFBEB] flex items-center gap-2 shadow-md p-6 rounded-md">
@@ -94,11 +132,18 @@ export default function Home() {
             </div>
             <div>
               <span>Budget Used</span>
-              <h1>47%</h1>
+              <h1>
+                $
+                {totalExpenses.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </h1>
             </div>
           </div>
         </div>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-8">
         <div className="bg-white p-4 shadow-md rounded-xl">
           <div className="h-[230px] w-full">
