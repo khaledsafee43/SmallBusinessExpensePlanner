@@ -6,6 +6,7 @@ import {
   WalletIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import {NavLink} from "react-router-dom"
 import {
   ResponsiveContainer,
   LineChart,
@@ -75,10 +76,10 @@ export default function Home() {
             Track your income, manage your expenses, and stay within your
             budget.
           </p>
-          <button className="flex rounded-lg bg-[#07845B] px-4 py-2 text-white hover:bg-[#066B4A]">
+          <NavLink to="/expenses" className="flex rounded-lg bg-[#07845B] px-4 py-2 w-40 text-white hover:bg-[#066B4A]">
             <PlusIcon />
             Add Expense
-          </button>
+          </NavLink>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-2">
           <div className="bg-[#F0FDF4] flex items-center gap-2 shadow-md p-6 rounded-md">

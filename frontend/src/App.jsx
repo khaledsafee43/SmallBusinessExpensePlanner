@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Expenses from "./pages/Expenses";
 import Footer from "./components/footer";
 import ExpenseManager from "./pages/EpenseManagement";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
 function App() {
   return (
     <>
@@ -13,6 +15,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/manage-Expenses" element={<ExpenseManager />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
         <Footer />
       </main>

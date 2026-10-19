@@ -10,6 +10,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/api/expenses", async (req, res) => {
+  try {
+    const expenses = await Expense.find().sort({ date: -1 });
+    res.status(200).json(expenses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to fetch expenses",
+    });
+  }
+});
+
 app.get("/api/expenses/dashboard", async (req, res) => {
   try {
     const expenses = await Expense.find().lean();
@@ -97,6 +109,30 @@ app.post("/api/expenses", async (req, res) => {
     console.error(error);
     res.status(500).json({
       message: "Server error",
+    });
+  }
+});
+
+app.delete("/api/expenses/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedExpense = await Expense.findByIdAndDelete(id);
+
+    if (!deletedExpense) {
+      return res.status(404).json({
+        message: "Expense not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Expense deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to delete expense",
     });
   }
 });

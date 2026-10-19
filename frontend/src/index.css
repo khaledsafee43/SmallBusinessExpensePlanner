@@ -3,3 +3,56 @@
 body {
   @apply bg-[#F8FAFC];
 }
+
+.controls {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  align-items: end;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid #e0e9e2;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 28px;
+  box-shadow: 0 10px 32px #1b41360c;
+}
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #385e54;
+}
+.controls input,
+.controls select {
+  width: 100%;
+  height: 46px;
+  border: 1px solid #ceddd4;
+  border-radius: 10px;
+  padding: 0 13px;
+  background: #fff;
+  color: #183b31;
+  outline: none;
+}
+.controls input:focus,
+.controls select:focus {
+  border-color: #21866d;
+  box-shadow: 0 0 0 3px #21866d24;
+}
+
+.reset,
+.empty button {
+  height: 46px;
+  border: 1px solid #bcd3c6;
+  background: #eaf5ed;
+  color: #1e684f;
+  border-radius: 10px;
+  padding: 0 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.reset:hover,
+.empty button:hover {
+  background: #d8eddf;
+}
