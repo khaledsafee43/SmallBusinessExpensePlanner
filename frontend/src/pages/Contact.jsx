@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Mail,
@@ -8,9 +7,12 @@ import {
   Clock,
   MessageCircle,
   ArrowUpRight,
-  CheckCircle2,
   Sprout,
 } from "lucide-react";
+
+import { contactShema } from "../schemas/ContactSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const contactDetails = [
   {
@@ -40,30 +42,21 @@ const inputClass =
   "mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/10";
 
 export default function Contact() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(contactShema),
+    defaultValues: {
+      fullName: "",
+      subject: "",
+      email: "",
+      message: "",
+    },
   });
 
-  const [status, setStatus] = useState("");
-
-  function handleChange(event) {
-    setForm((prev) => ({
-      ...prev,
-      [event.target.name]: event.target.value,
-    }));
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    // The form is UI-only until a backend or email service is connected.
-    setStatus(
-      "The contact form is ready, but message delivery has not been configured yet."
-    );
-  }
+  const onSubmit = async (data) => {};
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 md:px-8 md:py-16">
@@ -84,8 +77,8 @@ export default function Contact() {
 
           <p className="mt-5 text-base leading-7 text-slate-600">
             Have a question about managing your business expenses or using
-            BizPlan? Send us a message. We're here to help you get the most
-            out of your financial planning experience.
+            BizPlan? Send us a message. We're here to help you get the most out
+            of your financial planning experience.
           </p>
         </header>
 
@@ -103,9 +96,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold">BizPlan</h2>
-                  <p className="text-xs text-emerald-100/70">
-                    Expense Planner
-                  </p>
+                  <p className="text-xs text-emerald-100/70">Expense Planner</p>
                 </div>
               </div>
 
@@ -114,9 +105,9 @@ export default function Contact() {
               </h2>
 
               <p className="mt-4 text-sm leading-7 text-emerald-50/80">
-                Your questions, ideas, and feedback help us improve. Reach
-                out to learn more about BizPlan or share your experience
-                with our expense management tools.
+                Your questions, ideas, and feedback help us improve. Reach out
+                to learn more about BizPlan or share your experience with our
+                expense management tools.
               </p>
 
               <div className="mt-9 space-y-6">
@@ -151,7 +142,7 @@ export default function Contact() {
                         </p>
                       </div>
                     </div>
-                  )
+                  ),
                 )}
               </div>
 
@@ -162,8 +153,8 @@ export default function Contact() {
                 </div>
 
                 <p className="mt-2 text-sm leading-6 text-emerald-50/75">
-                  Send us your questions or feedback using the form.
-                  We'll be glad to hear from you.
+                  Send us your questions or feedback using the form. We'll be
+                  glad to hear from you.
                 </p>
               </div>
             </div>
@@ -184,81 +175,55 @@ export default function Contact() {
                 Fill out the form below with your details and message.
               </p>
 
-              <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="mt-8 space-y-5"
+              >
                 <div className="grid gap-5 sm:grid-cols-2">
                   <label className="block text-sm font-semibold text-slate-700">
                     Full Name
                     <input
-                      required
-                      minLength={2}
-                      maxLength={100}
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      autoComplete="name"
+                      {...register("fullName")}
                       placeholder="Enter your full name"
                       className={inputClass}
                     />
+                    {errors.fullName && <p className="text-red-700">{errors.fullName.message}</p>}
                   </label>
 
                   <label className="block text-sm font-semibold text-slate-700">
                     Email Address
                     <input
-                      required
-                      type="email"
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      autoComplete="email"
+                      {...register("email")}
                       placeholder="you@example.com"
                       className={inputClass}
                     />
+                    {errors.email && <p className="text-red-700">{errors.email.message}</p>}
                   </label>
                 </div>
 
                 <label className="block text-sm font-semibold text-slate-700">
                   Subject
                   <input
-                    required
-                    maxLength={150}
-                    name="subject"
-                    value={form.subject}
-                    onChange={handleChange}
+                    {...register("subject")}
                     placeholder="How can we help you?"
                     className={inputClass}
                   />
+                  {errors.subject && <p className="text-red-700">{errors.subject.message}</p>}
                 </label>
 
                 <label className="block text-sm font-semibold text-slate-700">
                   Your Message
                   <textarea
-                    required
-                    minLength={10}
-                    maxLength={2000}
+                    {...register("message")}
                     rows={6}
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
                     placeholder="Tell us more about your question or feedback..."
                     className={`${inputClass} resize-y`}
                   />
-
-                  <span className="mt-2 block text-right text-xs font-normal text-slate-400">
-                    {form.message.length}/2000 characters
-                  </span>
+                  {errors.message && <p className="text-red-700">{errors.message.message}</p>}
                 </label>
 
-                {status && (
-                  <div
-                    role="status"
-                    className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800"
-                  >
-                    <CheckCircle2 size={19} className="mt-0.5 shrink-0" />
-                    <p>{status}</p>
-                  </div>
-                )}
-
                 <button
+                  disabled={isSubmitting}
                   type="submit"
                   className="group flex w-full items-center justify-center gap-3 rounded-xl bg-emerald-700 px-5 py-4 text-sm font-bold text-white shadow-lg shadow-emerald-900/10 transition duration-300 hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-emerald-600/20"
                 >
@@ -270,8 +235,8 @@ export default function Contact() {
                 </button>
 
                 <p className="text-center text-xs leading-5 text-slate-400">
-                  Please avoid including passwords or other sensitive
-                  account information in your message.
+                  Please avoid including passwords or other sensitive account
+                  information in your message.
                 </p>
               </form>
             </div>

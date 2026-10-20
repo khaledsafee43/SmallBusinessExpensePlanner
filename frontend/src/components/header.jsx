@@ -60,32 +60,6 @@ export default function Header() {
 
         {/* Search, Profile and Mobile Menu */}
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-
-          {/* Search */}
-          <div className="flex items-center gap-1">
-            {show && (
-              <input
-                type="search"
-                placeholder="Search..."
-                aria-label="Search"
-                className="w-24 rounded-lg bg-white px-2 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-500 sm:w-36 md:w-44"
-              />
-            )}
-
-            <button
-              type="button"
-              onClick={() => setShow(!show)}
-              aria-label={show ? "Close search" : "Open search"}
-              className="rounded-lg p-2 text-white transition hover:bg-emerald-800"
-            >
-              {show ? (
-                <XIcon size={21} />
-              ) : (
-                <SearchIcon size={21} />
-              )}
-            </button>
-          </div>
-
           {/* Profile */}
           <button
             type="button"

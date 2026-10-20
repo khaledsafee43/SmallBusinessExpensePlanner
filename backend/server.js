@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db.js");
 dotenv.config();
 const Expense = require("./model/expense.js");
+const Budget = require("./model/Budget.js");
 
 const app = express();
 
@@ -18,6 +19,55 @@ app.get("/api/expenses", async (req, res) => {
     console.error(error);
     res.status(500).json({
       message: "Failed to fetch expenses",
+    });
+  }
+});
+
+app.get("/api/budget", async (req, res) => {
+  try {
+    let budget = await Budget.findOne();
+
+    if (!budget) {
+      budget = await Budget.create({
+        monthlyBudget: 5350,
+      });
+    }
+
+    res.status(200).json(budget);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to fetch budget",
+    });
+  }
+});
+
+app.put("/api/budget", async (req, res) => {
+  try {
+    const monthlyBudget = Number(req.body.monthlyBudget);
+
+    if (!Number.isFinite(monthlyBudget) || monthlyBudget <= 0) {
+      return res.status(400).json({
+        message: "Monthly budget must be greater than zero",
+      });
+    }
+
+    const budget = await Budget.findOneAndUpdate(
+      {},
+      { $set: { monthlyBudget } },
+      {
+        new: true,
+        upsert: true,
+        runValidators: true,
+        setDefaultsOnInsert: true,
+      },
+    );
+
+    res.status(200).json(budget);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to save budget",
     });
   }
 });

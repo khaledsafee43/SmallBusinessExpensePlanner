@@ -133,7 +133,6 @@ export default function Expenses() {
                   id="description"
                   maxLength={100}
                   placeholder="e.g. Grocery shopping, fuel..."
-                  aria-invalid={!!errors.description}
                   className={`${inputClass} pl-10 ${
                     errors.description
                       ? "border-red-400 focus:border-red-500 focus:ring-red-100"
@@ -170,7 +169,6 @@ export default function Expenses() {
                   min="0.01"
                   step="0.01"
                   placeholder="0.00"
-                  aria-invalid={!!errors.amount}
                   className={`${inputClass} pl-10 ${
                     errors.amount
                       ? "border-red-400 focus:border-red-500 focus:ring-red-100"
@@ -203,7 +201,6 @@ export default function Expenses() {
                 <select
                   {...register("category")}
                   id="category"
-                  aria-invalid={!!errors.category}
                   className={`${inputClass} appearance-none pl-10 ${
                     errors.category
                       ? "border-red-400 focus:border-red-500 focus:ring-red-100"
@@ -242,7 +239,7 @@ export default function Expenses() {
                 <select
                   {...register("paymentMethod")}
                   id="paymentMethod"
-                  aria-invalid={!!errors.paymentMethod}
+                  
                   className={`${inputClass} appearance-none pl-10 ${
                     errors.paymentMethod
                       ? "border-red-400 focus:border-red-500 focus:ring-red-100"
@@ -280,7 +277,6 @@ export default function Expenses() {
                   {...register("date")}
                   type="date"
                   id="date"
-                  aria-invalid={!!errors.date}
                   className={`${inputClass} pl-10 ${
                     errors.date
                       ? "border-red-400 focus:border-red-500 focus:ring-red-100"
@@ -316,7 +312,6 @@ export default function Expenses() {
                   rows={4}
                   maxLength={500}
                   placeholder="Add additional information about this expense..."
-                  aria-invalid={!!errors.notes}
                   className={`${inputClass} resize-y pl-10 ${
                     errors.notes
                       ? "border-red-400 focus:border-red-500 focus:ring-red-100"
