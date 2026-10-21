@@ -42,6 +42,49 @@ app.get("/api/budget", async (req, res) => {
   }
 });
 
+app.put("/api/expenses/:id", async (req, res) => {
+  try {
+    const { description, amount, category, paymentMethod, date, notes } =
+      req.body;
+
+    const updatedExpense = await Expense.findByIdAndUpdate(
+      req.params.id,
+      {
+        description,
+        amount,
+        category,
+        paymentMethod,
+        date,
+        notes,
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!updatedExpense) {
+      return res.status(404).json({
+        message: "Expense not found.",
+      });
+    }
+
+    return res.status(200).json(updatedExpense);
+  } catch (error) {
+    console.error("Update expense error:", error);
+
+    if (error.name === "ValidationError" || error.name === "CastError") {
+      return res.status(400).json({
+        message: "Invalid expense data or expense ID.",
+      });
+    }
+
+    return res.status(500).json({
+      message: "Failed to update expense.",
+    });
+  }
+});
+
 app.put("/api/budget", async (req, res) => {
   try {
     const monthlyBudget = Number(req.body.monthlyBudget);
