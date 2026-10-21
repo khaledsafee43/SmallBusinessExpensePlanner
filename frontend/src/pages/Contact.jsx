@@ -44,6 +44,7 @@ const inputClass =
 export default function Contact() {
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
@@ -56,7 +57,26 @@ export default function Contact() {
     },
   });
 
-  const onSubmit = async (data) => {};
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...data }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to save expense");
+      }
+      alert("message sent successfully!");
+      reset();
+    } catch (error) {
+      alert(error.message || "Something went wrong");
+    }
+  };
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 md:px-8 md:py-16">
@@ -187,7 +207,9 @@ export default function Contact() {
                       placeholder="Enter your full name"
                       className={inputClass}
                     />
-                    {errors.fullName && <p className="text-red-700">{errors.fullName.message}</p>}
+                    {errors.fullName && (
+                      <p className="text-red-700">{errors.fullName.message}</p>
+                    )}
                   </label>
 
                   <label className="block text-sm font-semibold text-slate-700">
@@ -197,7 +219,9 @@ export default function Contact() {
                       placeholder="you@example.com"
                       className={inputClass}
                     />
-                    {errors.email && <p className="text-red-700">{errors.email.message}</p>}
+                    {errors.email && (
+                      <p className="text-red-700">{errors.email.message}</p>
+                    )}
                   </label>
                 </div>
 
@@ -208,7 +232,9 @@ export default function Contact() {
                     placeholder="How can we help you?"
                     className={inputClass}
                   />
-                  {errors.subject && <p className="text-red-700">{errors.subject.message}</p>}
+                  {errors.subject && (
+                    <p className="text-red-700">{errors.subject.message}</p>
+                  )}
                 </label>
 
                 <label className="block text-sm font-semibold text-slate-700">
@@ -219,7 +245,9 @@ export default function Contact() {
                     placeholder="Tell us more about your question or feedback..."
                     className={`${inputClass} resize-y`}
                   />
-                  {errors.message && <p className="text-red-700">{errors.message.message}</p>}
+                  {errors.message && (
+                    <p className="text-red-700">{errors.message.message}</p>
+                  )}
                 </label>
 
                 <button
