@@ -1,8 +1,7 @@
-
 import { useEffect, useState } from "react";
 import { X, Save } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/expenses";
+const API_URL = "https://bizplane.onrender.com/api/expenses";
 
 const initialForm = {
   description: "",
@@ -13,11 +12,7 @@ const initialForm = {
   notes: "",
 };
 
-export default function EditExpenseModal({
-  expense,
-  onClose,
-  onSaved,
-}) {
+export default function EditExpenseModal({ expense, onClose, onSaved }) {
   const [form, setForm] = useState(initialForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -239,7 +234,8 @@ export default function EditExpenseModal({
 
           <div>
             <label htmlFor="edit-notes" className={labelClass}>
-              Notes <span className="font-normal text-slate-400">(optional)</span>
+              Notes{" "}
+              <span className="font-normal text-slate-400">(optional)</span>
             </label>
             <textarea
               id="edit-notes"

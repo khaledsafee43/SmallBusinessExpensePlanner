@@ -26,8 +26,8 @@ export default function Budget() {
     async function fetchData() {
       try {
         const [expensesResponse, budgetResponse] = await Promise.all([
-          fetch("http://localhost:5000/api/expenses"),
-          fetch("http://localhost:5000/api/budget"),
+          fetch("https://bizplane.onrender.com/api/expenses"),
+          fetch("https://bizplane.onrender.com/api/budget"),
         ]);
 
         if (!expensesResponse.ok) {
@@ -117,7 +117,7 @@ export default function Budget() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/budget", {
+      const response = await fetch("https://bizplane.onrender.com/api/budget", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

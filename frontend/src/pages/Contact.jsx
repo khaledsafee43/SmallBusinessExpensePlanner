@@ -59,22 +59,33 @@ export default function Contact() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch("http://localhost:5000/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://bizplane.onrender.com/api/contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: data.fullName,
+            email: data.email,
+            subject: data.subject,
+            message: data.message,
+          }),
         },
-        body: JSON.stringify({ ...data }),
-      });
+      );
 
       const result = await response.json();
+
       if (!response.ok) {
-        throw new Error(result.message || "Failed to save expense");
+        throw new Error(result.message || "Failed to submit contact form.");
       }
-      alert("message sent successfully!");
+
+      alert("Message sent successfully!");
       reset();
     } catch (error) {
-      alert(error.message || "Something went wrong");
+      console.error("Contact form error:", error);
+      alert(error.message || "Something went wrong.");
     }
   };
 

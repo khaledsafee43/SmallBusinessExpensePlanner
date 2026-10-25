@@ -7,7 +7,7 @@ import ExpenseTable from "../components/expenses/ExpenseTable";
 import ExpensePagination from "../components/expenses/ExpensePagination";
 import EditExpenseModal from "../components/expenses/EditExpenseModal";
 
-const API_URL = "http://localhost:5000/api/expenses";
+const API_URL = "https://bizplane.onrender.com/api/expenses";
 const PAGE_SIZE = 8;
 
 export default function ExpenseManager() {

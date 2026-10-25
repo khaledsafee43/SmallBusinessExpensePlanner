@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { expenseSchema } from "../schemas/ExpensesSchema.js";
@@ -39,16 +38,19 @@ export default function Expenses() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch("http://localhost:5000/api/expenses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://bizplane.onrender.com/api/expenses",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...data,
+            amount: Number(data.amount),
+          }),
         },
-        body: JSON.stringify({
-          ...data,
-          amount: Number(data.amount),
-        }),
-      });
+      );
 
       const result = await response.json();
 
@@ -79,8 +81,8 @@ export default function Expenses() {
             </h1>
 
             <p className="mt-3 max-w-xl text-sm leading-6 text-slate-500 sm:text-base">
-              Record your business expenses, organize your transactions,
-              and keep your financial information up to date.
+              Record your business expenses, organize your transactions, and
+              keep your financial information up to date.
             </p>
           </div>
 
@@ -102,9 +104,7 @@ export default function Expenses() {
             </div>
 
             <div>
-              <h2 className="font-bold text-slate-900">
-                Expense Information
-              </h2>
+              <h2 className="font-bold text-slate-900">Expense Information</h2>
               <p className="mt-1 text-xs text-slate-500">
                 Fields marked with * are required.
               </p>
@@ -239,7 +239,6 @@ export default function Expenses() {
                 <select
                   {...register("paymentMethod")}
                   id="paymentMethod"
-                  
                   className={`${inputClass} appearance-none pl-10 ${
                     errors.paymentMethod
                       ? "border-red-400 focus:border-red-500 focus:ring-red-100"
@@ -298,7 +297,8 @@ export default function Expenses() {
                 htmlFor="notes"
                 className="text-sm font-semibold text-slate-700"
               >
-                Notes <span className="font-normal text-slate-400">(Optional)</span>
+                Notes{" "}
+                <span className="font-normal text-slate-400">(Optional)</span>
               </label>
 
               <div className="relative">

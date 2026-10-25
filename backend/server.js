@@ -5,6 +5,7 @@ const connectDB = require("./config/db.js");
 dotenv.config();
 const Expense = require("./model/expense.js");
 const Budget = require("./model/Budget.js");
+const Contact = require("./model/Contact.js");
 
 const app = express();
 
@@ -81,6 +82,34 @@ app.put("/api/expenses/:id", async (req, res) => {
 
     return res.status(500).json({
       message: "Failed to update expense.",
+    });
+  }
+});
+
+app.post("/api/contact", async (req, res) => {
+  try {
+    console.log("Request body:", req.body);
+
+    const { fullName, email, subject, message } = req.body;
+
+    const contact = await Contact.create({
+      fullName,
+      email,
+      subject,
+      message,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Contact submitted successfully.",
+      data: contact,
+    });
+  } catch (error) {
+    console.error("Contact error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to submit contact form.",
     });
   }
 });

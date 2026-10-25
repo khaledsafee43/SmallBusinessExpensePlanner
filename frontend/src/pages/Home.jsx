@@ -6,7 +6,7 @@ import {
   WalletIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import {NavLink} from "react-router-dom"
+import { NavLink } from "react-router-dom";
 import {
   ResponsiveContainer,
   LineChart,
@@ -34,7 +34,7 @@ export default function Home() {
     const fetchDashboard = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/expenses/dashboard",
+          "https://bizplane.onrender.com/api/expenses/dashboard",
         );
 
         if (!response.ok) {
@@ -76,7 +76,10 @@ export default function Home() {
             Track your income, manage your expenses, and stay within your
             budget.
           </p>
-          <NavLink to="/expenses" className="flex rounded-lg bg-[#07845B] px-4 py-2 w-40 text-white hover:bg-[#066B4A]">
+          <NavLink
+            to="/expenses"
+            className="flex rounded-lg bg-[#07845B] px-4 py-2 w-40 text-white hover:bg-[#066B4A]"
+          >
             <PlusIcon />
             Add Expense
           </NavLink>
