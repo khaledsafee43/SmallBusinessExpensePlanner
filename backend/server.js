@@ -2,16 +2,27 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db.js");
+
 dotenv.config();
+
 const Expense = require("./model/expense.js");
 const Budget = require("./model/Budget.js");
 const Contact = require("./model/Contact.js");
 
 const app = express();
 
-app.use(cors());
+// CORS configuration
+app.use(
+  cors({
+    origin: "https://small-business-expense-planner-phi.vercel.app",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
 app.use(express.json());
 
+// Get all expenses
 app.get("/api/expenses", async (req, res) => {
   try {
     const expenses = await Expense.find().sort({ date: -1 });
@@ -24,6 +35,7 @@ app.get("/api/expenses", async (req, res) => {
   }
 });
 
+// Get budget
 app.get("/api/budget", async (req, res) => {
   try {
     let budget = await Budget.findOne();
@@ -43,6 +55,7 @@ app.get("/api/budget", async (req, res) => {
   }
 });
 
+// Update expense
 app.put("/api/expenses/:id", async (req, res) => {
   try {
     const { description, amount, category, paymentMethod, date, notes } =
@@ -86,6 +99,7 @@ app.put("/api/expenses/:id", async (req, res) => {
   }
 });
 
+// Submit contact form
 app.post("/api/contact", async (req, res) => {
   try {
     console.log("Request body:", req.body);
@@ -114,6 +128,7 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
+// Update budget
 app.put("/api/budget", async (req, res) => {
   try {
     const monthlyBudget = Number(req.body.monthlyBudget);
@@ -138,12 +153,14 @@ app.put("/api/budget", async (req, res) => {
     res.status(200).json(budget);
   } catch (error) {
     console.error(error);
+
     res.status(500).json({
       message: "Failed to save budget",
     });
   }
 });
 
+// Dashboard data
 app.get("/api/expenses/dashboard", async (req, res) => {
   try {
     const expenses = await Expense.find().lean();
@@ -181,7 +198,9 @@ app.get("/api/expenses/dashboard", async (req, res) => {
       return {
         year: date.getFullYear(),
         monthIndex: date.getMonth(),
-        month: date.toLocaleString("en-US", { month: "short" }),
+        month: date.toLocaleString("en-US", {
+          month: "short",
+        }),
         expenses: 0,
       };
     });
@@ -200,7 +219,7 @@ app.get("/api/expenses/dashboard", async (req, res) => {
       }
     });
 
-    res.json({
+    res.status(200).json({
       totalExpenses,
       categoryData,
       monthlyData: monthlyData.map(({ month, expenses }) => ({
@@ -210,14 +229,18 @@ app.get("/api/expenses/dashboard", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+
     res.status(500).json({
       message: "Failed to load dashboard data",
     });
   }
 });
+
+// Create expense
 app.post("/api/expenses", async (req, res) => {
   try {
     const expense = await Expense.create(req.body);
+
     res.status(201).json({
       message: "Expenses saved successfully",
       expense,
@@ -228,13 +251,16 @@ app.post("/api/expenses", async (req, res) => {
         message: "Invalid expense data",
       });
     }
+
     console.error(error);
+
     res.status(500).json({
       message: "Server error",
     });
   }
 });
 
+// Delete expense
 app.delete("/api/expenses/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -259,10 +285,20 @@ app.delete("/api/expenses/:id", async (req, res) => {
   }
 });
 
+// Start server
 const startServer = async () => {
-  connectDB();
-  app.listen(process.env.PORT || 5000, () =>
-    console.log(`Server is running on port: ${process.env.PORT}`),
-  );
+  try {
+    await connectDB();
+
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port: ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 };
+
 startServer();
